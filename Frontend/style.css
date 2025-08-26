@@ -1,0 +1,218 @@
+:root {
+  --blue-light: #caddff;
+  --blue: #165cde;
+  --blue-dark: #092456;
+  --white: #ffffff;
+  --black: #000000;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Inter", system-ui, Arial, sans-serif;
+  background: var(--blue-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  background: #000000;
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 1080px;
+  max-width: 95%;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+}
+
+.subscribe {
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+
+.subscribe-text {
+  flex: 1;
+  padding: 60px 60px 60px 70px;
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.subscribe-text h1 {
+  font-size: 2.4rem;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.subscribe-text p {
+  color: var(--white);
+  margin-bottom: 25px;
+  line-height: 1.6;
+  max-width: 90%;
+}
+
+.benefits {
+  list-style: none;
+  margin-bottom: 30px;
+}
+
+.benefits li {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 18px;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--white);
+}
+
+.benefits li img {
+  background: var(--blue);
+  border-radius: 50%;
+  padding: 1px;
+  width: 28px;
+  height: 28px;
+  margin-right: 12px;
+  margin-top: 10px;
+  flex-shrink: 0;
+}
+
+.form input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  margin-bottom: 12px;
+  font-size: 1rem;
+  outline: none;
+}
+
+/* Botões do formulário */
+.form button {
+  width: 100%;
+  padding: 14px;
+  border-radius: 8px;
+  border: none;
+  background: var(--blue);
+  color: var(--white);
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+}
+
+.secondary-form {
+  margin-top: 20px;
+}
+
+/* Botão de inscrição - fica verde no hover */
+#subscribeForm button:hover {
+  background: #4caf50; /* verde */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(76, 175, 80, 0.4);
+}
+
+/* Botão de descadastro - fica vermelho no hover */
+.unsubscribe-btn:hover {
+  background: #f44336; /* vermelho */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(244, 67, 54, 0.4);
+}
+
+/* Quando passar o mouse, fica vermelho */
+.unsubscribe-btn:hover {
+  background: #f44336;
+  transform: translateY(-2px);
+}
+
+.message {
+  margin-top: 10px;
+  min-height: 20px;
+  font-size: 0.9rem;
+}
+
+.message.success {
+  color: #4caf50;
+}
+.message.error {
+  color: #f44336;
+}
+
+.subscribe-image {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.subscribe-image img {
+  max-width: 100%;
+}
+
+.subscribe-image .logo {
+  margin-top: 30px;
+  width: 300px;
+}
+
+.confirm {
+  color: var(--white);
+  text-align: center;
+  padding: 80px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background: radial-gradient(circle at center, #0a2c77 15%, #000000 85%);
+}
+
+.confirm-icon {
+  width: 100px;
+  margin-bottom: 25px;
+  background: var(--white);
+  border-radius: 50%;
+  padding: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirm-icon svg path {
+  stroke: var(--blue);
+}
+
+.confirm h1 {
+  font-size: 1.8rem;
+  margin-bottom: 18px;
+  font-weight: 700;
+  color: var(--white);
+}
+
+.confirm p {
+  font-size: 1rem;
+  max-width: 520px;
+  margin: 0 auto 25px;
+  color: var(--blue-light);
+  line-height: 1.6;
+}
+
+.confirm .logo {
+  margin-top: 25px;
+  width: 300px;
+}
+
+.hidden {
+  display: none !important;
+}

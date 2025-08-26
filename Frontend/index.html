@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Mindtech Newsletter</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="assets/fonts/inter.css" />
+  </head>
+  <body>
+    <main class="card">
+      <section id="subscribeSection" class="subscribe">
+        <div class="subscribe-text">
+          <h1>Inscreva-se agora!</h1>
+          <p>
+            Preencha o formulário abaixo para se inscrever e comece a receber
+            nossas atualizações diretamente em sua caixa de entrada.
+          </p>
+
+          <ul class="benefits">
+            <li>
+              <img src="assets/icone.svg" alt="" />
+              Guias e Tutoriais: Aprenda como implementar e otimizar soluções de
+              IoT para sua empresa.
+            </li>
+            <li>
+              <img src="assets/icone.svg" alt="" />
+              Notícias e Tendências: Fique por dentro das últimas novidades e
+              avanços no mundo do IoT.
+            </li>
+            <li>
+              <img src="assets/icone.svg" alt="" />
+              Ofertas e Promoções: Receba ofertas especiais e promoções
+              exclusivas.
+            </li>
+          </ul>
+
+          <form id="subscribeForm" class="form">
+            <input
+              id="subscribeEmail"
+              type="email"
+              placeholder="Digite o e-mail que deseja cadastrar"
+              required
+            />
+            <button type="submit">Inscrever-se</button>
+          </form>
+          <div
+            id="subscribeMessage"
+            class="message"
+            role="status"
+            aria-live="polite"
+          ></div>
+
+          <form id="unsubscribeForm" class="form secondary-form">
+            <input
+              id="unsubscribeEmail"
+              type="email"
+              placeholder="Digite o e-mail que deseja descadastrar"
+              required
+            />
+            <button type="submit" class="unsubscribe-btn">Descadastrar</button>
+          </form>
+          <div
+            id="unsubscribeMessage"
+            class="message"
+            role="status"
+            aria-live="polite"
+          ></div>
+        </div>
+
+        <div class="subscribe-image">
+          <img src="assets/Imagem.png" alt="Ilustração IoT" />
+          <img
+            src="assets/logo-mindtech.svg"
+            alt="Mindtech logo"
+            class="logo"
+          />
+        </div>
+      </section>
+
+      <section id="confirmSection" class="confirm hidden">
+        <img src="assets/icone.svg" alt="Confirmação" class="confirm-icon" />
+        <h1>Obrigado por se inscrever na nossa newsletter!</h1>
+        <p>
+          Agora você faz parte da comunidade Mindtech e está a um passo de ficar
+          atualizado com as últimas inovações e tendências em Internet das
+          Coisas (IoT).
+        </p>
+        <img src="assets/logo-mindtech.svg" alt="Mindtech logo" class="logo" />
+      </section>
+    </main>
+
+    <script>
+      window.__API_BASE__ = "http://localhost:4000";
+    </script>
+    <script src="app.js"></script>
+  </body>
+</html>
