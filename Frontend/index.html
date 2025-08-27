@@ -3,13 +3,18 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="Inscreva-se na newsletter da Mindtech e receba as últimas novidades sobre IoT."
+    />
     <title>Mindtech Newsletter</title>
+
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="assets/fonts/inter.css" />
   </head>
   <body>
     <main class="card">
-      <section id="subscribeSection" class="subscribe">
+      <section id="subscribeSection" class="content-section subscribe">
         <div class="subscribe-text">
           <h1>Inscreva-se agora!</h1>
           <p>
@@ -35,11 +40,11 @@
             </li>
           </ul>
 
-          <form id="subscribeForm" class="form">
+          <form id="subscribeForm" class="form" novalidate>
             <input
               id="subscribeEmail"
               type="email"
-              placeholder="Digite o e-mail que deseja cadastrar"
+              placeholder="Digite o e-mail que deseja inscrever"
               required
             />
             <button type="submit">Inscrever-se</button>
@@ -51,14 +56,16 @@
             aria-live="polite"
           ></div>
 
-          <form id="unsubscribeForm" class="form secondary-form">
+          <form id="unsubscribeForm" class="form secondary-form" novalidate>
             <input
               id="unsubscribeEmail"
               type="email"
-              placeholder="Digite o e-mail que deseja descadastrar"
+              placeholder="Digite o e-mail que deseja desinscrever"
               required
             />
-            <button type="submit" class="unsubscribe-btn">Descadastrar</button>
+            <button type="submit" class="unsubscribe-btn">
+              Desinscrever-se
+            </button>
           </form>
           <div
             id="unsubscribeMessage"
@@ -69,24 +76,59 @@
         </div>
 
         <div class="subscribe-image">
-          <img src="assets/Imagem.png" alt="Ilustração IoT" />
+          <img
+            src="assets/Imagem.png"
+            alt="Ilustração de um homem usando um laptop com o logo de IoT"
+          />
           <img
             src="assets/logo-mindtech.svg"
-            alt="Mindtech logo"
+            alt="Logotipo da Mindtech - Design House & IoT"
             class="logo"
           />
         </div>
       </section>
 
-      <section id="confirmSection" class="confirm hidden">
-        <img src="assets/icone.svg" alt="Confirmação" class="confirm-icon" />
+      <section
+        id="confirmSubscribeSection"
+        class="content-section confirm hidden"
+      >
+        <img
+          src="assets/icone.svg"
+          alt="Ícone de sucesso"
+          class="confirm-icon"
+        />
         <h1>Obrigado por se inscrever na nossa newsletter!</h1>
         <p>
           Agora você faz parte da comunidade Mindtech e está a um passo de ficar
           atualizado com as últimas inovações e tendências em Internet das
           Coisas (IoT).
         </p>
-        <img src="assets/logo-mindtech.svg" alt="Mindtech logo" class="logo" />
+        <img
+          src="assets/logo-mindtech.svg"
+          alt="Logotipo da Mindtech"
+          class="logo"
+        />
+      </section>
+
+      <section
+        id="confirmUnsubscribeSection"
+        class="content-section confirm hidden"
+      >
+        <img
+          src="assets/icone.svg"
+          alt="Ícone de sucesso"
+          class="confirm-icon"
+        />
+        <h1>Você foi desinscrito da nossa newsletter.</h1>
+        <p>
+          Sentimos por sua saída! Seu e-mail foi removido da nossa lista. Você
+          pode se inscrever novamente a qualquer momento.
+        </p>
+        <img
+          src="assets/logo-mindtech.svg"
+          alt="Logotipo da Mindtech"
+          class="logo"
+        />
       </section>
     </main>
 

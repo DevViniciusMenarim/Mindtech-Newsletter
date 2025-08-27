@@ -1,109 +1,108 @@
-(function () {
-  const API = window.__API_BASE__ || "http://localhost:4000";
+document.addEventListener("DOMContentLoaded", () => {
+  const API_BASE = window.__API_BASE__ || "http://localhost:4000";
 
-  function qs(sel) {
-    return document.querySelector(sel);
-  }
-  const subscribeForm = qs("#subscribeForm");
-  const subscribeEmail = qs("#subscribeEmail");
-  const subscribeMessage = qs("#subscribeMessage");
+  const ui = {
+    subscribe: document.querySelector("#subscribeSection"),
+    confirmSubscribe: document.querySelector("#confirmSubscribeSection"),
+    confirmUnsubscribe: document.querySelector("#confirmUnsubscribeSection"),
 
-  const unsubscribeForm = qs("#unsubscribeForm");
-  const unsubscribeEmail = qs("#unsubscribeEmail");
-  const unsubscribeMessage = qs("#unsubscribeMessage");
+    subscribeForm: document.querySelector("#subscribeForm"),
+    subscribeEmail: document.querySelector("#subscribeEmail"),
+    subscribeMessage: document.querySelector("#subscribeMessage"),
 
-  const subscribeSection = qs("#subscribeSection");
-  const confirmSection = qs("#confirmSection");
+    unsubscribeForm: document.querySelector("#unsubscribeForm"),
+    unsubscribeEmail: document.querySelector("#unsubscribeEmail"),
+    unsubscribeMessage: document.querySelector("#unsubscribeMessage"),
+  };
 
-  function show(el, text, type = "") {
-    el.textContent = text;
-    el.className = "message" + (type ? " " + type : "");
+  const renderState = (state) => {
+    Object.values(ui).forEach((element) => {
+      if (element && element.classList.contains("content-section")) {
+        element.classList.add("hidden");
+      }
+    });
+    if (ui[state]) {
+      ui[state].classList.remove("hidden");
+    }
+  };
 
-    // Mensagem desaparece após 5s
+  const normalizeEmail = (email) => (email || "").toLowerCase().trim();
+
+  let messageTimer = null;
+  const showMessage = (element, text, type = "") => {
+    if (!element) return;
+    element.textContent = text;
+    element.className = `message ${type}`;
+
+    clearTimeout(messageTimer);
     if (text) {
-      setTimeout(() => {
-        el.textContent = "";
-        el.className = "message";
+      messageTimer = setTimeout(() => {
+        element.textContent = "";
+        element.className = "message";
       }, 5000);
     }
-  }
+  };
 
-  // --- INSCRIÇÃO ---
-  subscribeForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const email = subscribeEmail.value.trim();
-    if (!email) return;
-
-    show(subscribeMessage, "Enviando...", "");
-
+  const postJSON = async (endpoint, payload) => {
     try {
-      const res = await fetch(`${API}/subscribe`, {
+      const response = await fetch(`${API_BASE}${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify(payload),
       });
-      const data = await res.json();
+      const data = await response.json().catch(() => ({}));
+      return { ok: response.ok, status: response.status, data };
+    } catch (error) {
+      console.error("API call failed:", error);
+      return {
+        ok: false,
+        status: 503,
+        data: { error: "Erro de conexão. Verifique o backend." },
+      };
+    }
+  };
 
-      if (res.ok) {
-        // Novo cadastro ou reativação → confirmação
-        subscribeSection.classList.add("hidden");
-        confirmSection.classList.remove("hidden");
-        subscribeForm.reset();
-      } else if (res.status === 409) {
-        // Já ativo → apenas mensagem de erro
-        show(subscribeMessage, "Este email já está cadastrado.", "error");
-      } else if (res.status === 400) {
-        show(subscribeMessage, data.error || "Email inválido", "error");
-      } else {
-        show(
-          subscribeMessage,
-          data.error || "Ocorreu um erro. Tente novamente.",
-          "error"
-        );
-      }
-    } catch (err) {
-      show(subscribeMessage, "Erro de conexão. Verifique o backend.", "error");
-      console.error(err);
+  ui.subscribeForm?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = normalizeEmail(ui.subscribeEmail.value);
+    if (!email) return;
+
+    showMessage(ui.subscribeMessage, "Enviando...");
+
+    const { ok, data } = await postJSON("/subscribe", { email });
+
+    if (ok) {
+      renderState("confirmSubscribe");
+      ui.subscribeForm.reset();
+    } else {
+      showMessage(
+        ui.subscribeMessage,
+        data.error || "Ocorreu um erro.",
+        "error"
+      );
     }
   });
 
-  // --- DESCADASTRAR ---
-  if (unsubscribeForm) {
-    unsubscribeForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const email = unsubscribeEmail.value.trim();
-      if (!email) return;
+  ui.unsubscribeForm?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = normalizeEmail(ui.unsubscribeEmail.value);
+    if (!email) return;
 
-      show(unsubscribeMessage, "Processando...", "");
+    showMessage(ui.unsubscribeMessage, "Processando...");
 
-      try {
-        const res = await fetch(`${API}/unsubscribe`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email }),
-        });
-        const data = await res.json();
+    const { ok, data } = await postJSON("/unsubscribe", { email });
 
-        if (res.ok) {
-          show(unsubscribeMessage, "Descadastrado com sucesso", "success");
-          unsubscribeForm.reset();
-        } else if (res.status === 404) {
-          show(unsubscribeMessage, "Email não encontrado", "error");
-        } else {
-          show(
-            unsubscribeMessage,
-            data.error || "Erro ao descadastrar",
-            "error"
-          );
-        }
-      } catch (err) {
-        show(
-          unsubscribeMessage,
-          "Erro de conexão. Verifique o backend.",
-          "error"
-        );
-        console.error(err);
-      }
-    });
-  }
-})();
+    if (ok) {
+      renderState("confirmUnsubscribe");
+      ui.unsubscribeForm.reset();
+    } else {
+      showMessage(
+        ui.unsubscribeMessage,
+        data.error || "Erro ao descadastrar.",
+        "error"
+      );
+    }
+  });
+
+  renderState("subscribe");
+});

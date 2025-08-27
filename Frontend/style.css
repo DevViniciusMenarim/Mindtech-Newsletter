@@ -4,6 +4,8 @@
   --blue-dark: #092456;
   --white: #ffffff;
   --black: #000000;
+  --green-success: #4caf50;
+  --red-error: #f44336;
 }
 
 * {
@@ -13,7 +15,6 @@
 }
 
 body {
-  margin: 0;
   min-height: 100vh;
   font-family: "Inter", system-ui, Arial, sans-serif;
   background: var(--blue-dark);
@@ -23,129 +24,28 @@ body {
 }
 
 .card {
-  background: #000000;
+  background: var(--black);
   border-radius: 20px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
   width: 1080px;
   max-width: 95%;
   box-shadow: 0 0 50px rgba(0, 0, 0, 0.6);
   overflow: hidden;
 }
 
+.content-section {
+  width: 100%;
+}
+
 .subscribe {
   display: flex;
-  width: 100%;
   align-items: center;
 }
 
 .subscribe-text {
   flex: 1;
-  padding: 60px 60px 60px 70px;
+  padding: 60px 70px;
   color: var(--white);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.subscribe-text h1 {
-  font-size: 2.4rem;
-  margin-bottom: 20px;
-  font-weight: 700;
-}
-
-.subscribe-text p {
-  color: var(--white);
-  margin-bottom: 25px;
-  line-height: 1.6;
-  max-width: 90%;
-}
-
-.benefits {
-  list-style: none;
-  margin-bottom: 30px;
-}
-
-.benefits li {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 18px;
-  font-size: 1rem;
-  line-height: 1.5;
-  color: var(--white);
-}
-
-.benefits li img {
-  background: var(--blue);
-  border-radius: 50%;
-  padding: 1px;
-  width: 28px;
-  height: 28px;
-  margin-right: 12px;
-  margin-top: 10px;
-  flex-shrink: 0;
-}
-
-.form input {
-  width: 100%;
-  padding: 14px;
-  border-radius: 10px;
-  border: none;
-  margin-bottom: 12px;
-  font-size: 1rem;
-  outline: none;
-}
-
-/* Botões do formulário */
-.form button {
-  width: 100%;
-  padding: 14px;
-  border-radius: 8px;
-  border: none;
-  background: var(--blue);
-  color: var(--white);
-  font-weight: bold;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
-}
-
-.secondary-form {
-  margin-top: 20px;
-}
-
-/* Botão de inscrição - fica verde no hover */
-#subscribeForm button:hover {
-  background: #4caf50; /* verde */
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(76, 175, 80, 0.4);
-}
-
-/* Botão de descadastro - fica vermelho no hover */
-.unsubscribe-btn:hover {
-  background: #f44336; /* vermelho */
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(244, 67, 54, 0.4);
-}
-
-/* Quando passar o mouse, fica vermelho */
-.unsubscribe-btn:hover {
-  background: #f44336;
-  transform: translateY(-2px);
-}
-
-.message {
-  margin-top: 10px;
-  min-height: 20px;
-  font-size: 0.9rem;
-}
-
-.message.success {
-  color: #4caf50;
-}
-.message.error {
-  color: #f44336;
 }
 
 .subscribe-image {
@@ -166,6 +66,80 @@ body {
   width: 300px;
 }
 
+.subscribe-text h1 {
+  font-size: 2.4rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.subscribe-text p {
+  line-height: 1.6;
+  margin-bottom: 25px;
+  max-width: 90%;
+}
+
+.benefits {
+  list-style: none;
+  margin-bottom: 30px;
+}
+
+.benefits li {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 18px;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.benefits li img {
+  background: var(--blue);
+  border-radius: 50%;
+  padding: 1px;
+  width: 28px;
+  height: 28px;
+  margin-right: 12px;
+  margin-top: 10px;
+  flex-shrink: 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  margin-bottom: 12px;
+  font-size: 1rem;
+  outline: none;
+}
+
+.form button {
+  width: 100%;
+  padding: 14px;
+  border-radius: 8px;
+  border: none;
+  background: var(--blue);
+  color: var(--white);
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+}
+
+.secondary-form {
+  margin-top: 20px;
+}
+
+.message {
+  margin-top: 10px;
+  min-height: 20px;
+  font-size: 0.9rem;
+}
+
 .confirm {
   color: var(--white);
   text-align: center;
@@ -174,30 +148,21 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  background: radial-gradient(circle at center, #0a2c77 15%, #000000 85%);
+  background: radial-gradient(circle at center, #0a2c77 30%, var(--black) 70%);
 }
 
 .confirm-icon {
   width: 100px;
-  margin-bottom: 25px;
+  margin-bottom: 40px;
   background: var(--white);
   border-radius: 50%;
   padding: 3px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.confirm-icon svg path {
-  stroke: var(--blue);
 }
 
 .confirm h1 {
   font-size: 1.8rem;
-  margin-bottom: 18px;
   font-weight: 700;
-  color: var(--white);
+  margin-bottom: 18px;
 }
 
 .confirm p {
@@ -209,8 +174,34 @@ body {
 }
 
 .confirm .logo {
-  margin-top: 25px;
+  margin-top: 20px;
   width: 300px;
+}
+
+#subscribeForm button:hover {
+  background: var(--green-success);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(76, 175, 80, 0.4);
+}
+
+.unsubscribe-btn:hover {
+  background: var(--red-error);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(244, 67, 54, 0.4);
+}
+
+.form input:focus,
+.form button:focus {
+  outline: 3px solid rgba(22, 92, 222, 0.12);
+  outline-offset: 2px;
+}
+
+.message.success {
+  color: var(--green-success);
+}
+
+.message.error {
+  color: var(--red-error);
 }
 
 .hidden {

@@ -1,101 +1,114 @@
 require("dotenv").config();
 const express = require("express");
-const pool = require("./db");
 const cors = require("cors");
 const path = require("path");
+const pool = require("./db");
 
 const PORT = process.env.PORT || 4000;
 const app = express();
 
-// Configuração de CORS
-const allowedOrigins = (process.env.ALLOWED_ORIGINS || "")
-  .split(",")
-  .map((s) => s.trim())
-  .filter(Boolean);
-
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.length === 0) return callback(null, true);
-    if (allowedOrigins.includes(origin)) return callback(null, true);
-    callback(new Error("Not allowed by CORS"));
-  },
-};
-
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
-
-// Servir arquivos do frontend
 app.use(express.static(path.join(__dirname, "../Frontend")));
 
-// Função de validação de email
-function isValidEmail(email) {
+const isValidEmail = (email) => {
   if (!email || typeof email !== "string") return false;
   return /\S+@\S+\.\S+/.test(email);
-}
+};
 
-// --- ROTA DE INSCRIÇÃO ---
+const normalizeEmail = (email) => (email || "").toLowerCase().trim();
+
+const findSubscriber = async (email) => {
+  const [rows] = await pool.execute(
+    "SELECT id, email, active FROM subscribers WHERE email = ?",
+    [email]
+  );
+  return rows[0];
+};
+
+const reactivateSubscriber = (email) => {
+  return pool.execute("UPDATE subscribers SET active = 1 WHERE email = ?", [
+    email,
+  ]);
+};
+
+const createSubscriber = async (email) => {
+  const [result] = await pool.execute(
+    "INSERT INTO subscribers (email) VALUES (?)",
+    [email]
+  );
+  return { id: result.insertId, email };
+};
+
+const deactivateSubscriber = (email) => {
+  return pool.execute("UPDATE subscribers SET active = 0 WHERE email = ?", [
+    email,
+  ]);
+};
+
 app.post("/subscribe", async (req, res) => {
-  const { email } = req.body;
-  if (!isValidEmail(email))
+  const email = normalizeEmail(req.body.email);
+
+  if (!isValidEmail(email)) {
     return res.status(400).json({ error: "Email inválido" });
+  }
 
   try {
-    // Primeiro, verifica se o email já existe
-    const [rows] = await pool.execute("SELECT * FROM subscribers WHERE email = ?", [email.toLowerCase().trim()]);
+    const existingSubscriber = await findSubscriber(email);
 
-    if (rows.length > 0) {
-      const subscriber = rows[0];
-
-      if (subscriber.active === 1) {
-        // Já existe e está ativo → retorna erro 409
-        return res.status(409).json({ error: "Email já cadastrado e ativo" });
+    if (existingSubscriber) {
+      if (existingSubscriber.active) {
+        return res
+          .status(409)
+          .json({ error: "Este email já está cadastrado." });
       } else {
-        // Existe mas está inativo → reativa
-        await pool.execute("UPDATE subscribers SET active = 1 WHERE email = ?", [email.toLowerCase().trim()]);
-        return res.status(200).json({ email, reactivated: true });
+        await reactivateSubscriber(email);
+        return res
+          .status(200)
+          .json({ message: "Sua inscrição foi reativada!", reactivated: true });
       }
     }
 
-    // Não existe → insere novo
-    const [result] = await pool.execute(
-      "INSERT INTO subscribers (email, active) VALUES (?, 1)",
-      [email.toLowerCase().trim()]
-    );
-    return res.status(201).json({ id: result.insertId, email });
-
-  } catch (err) {
-    console.error("DB error on /subscribe:", err);
-    return res.status(500).json({ error: "Erro interno" });
+    const newSubscriber = await createSubscriber(email);
+    return res.status(201).json(newSubscriber);
+  } catch (error) {
+    console.error("Erro em /subscribe:", error);
+    return res.status(500).json({ error: "Erro interno do servidor." });
   }
 });
 
-// --- ROTA DE DESCADASTRO ---
 app.post("/unsubscribe", async (req, res) => {
-  const { email } = req.body;
-  if (!isValidEmail(email))
+  const email = normalizeEmail(req.body.email);
+
+  if (!isValidEmail(email)) {
     return res.status(400).json({ error: "Email inválido" });
+  }
 
   try {
-    const sql = "UPDATE subscribers SET active = 0 WHERE email = ?";
-    const [result] = await pool.execute(sql, [email.toLowerCase().trim()]);
+    const subscriber = await findSubscriber(email);
 
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ error: "Email não encontrado" });
+    if (!subscriber) {
+      return res.status(404).json({ error: "Este e-mail não está inscrito." });
     }
-    return res.status(200).json({ email });
-  } catch (err) {
-    console.error("DB error on /unsubscribe:", err);
-    return res.status(500).json({ error: "Erro interno" });
+
+    if (!subscriber.active) {
+      return res.status(409).json({ error: "Este e-mail já foi desinscrito." });
+    }
+
+    await deactivateSubscriber(email);
+    return res
+      .status(200)
+      .json({ message: "Você foi desinscrito com sucesso." });
+  } catch (error) {
+    console.error("Erro em /unsubscribe:", error);
+    return res.status(500).json({ error: "Erro interno do servidor." });
   }
 });
 
-// --- ROTA PÁGINA INICIAL ---
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../Frontend/index.html"));
 });
 
-// --- INICIA SERVIDOR ---
 app.listen(PORT, () => {
-  console.log(`✅ Backend rodando em http://localhost:${PORT}`);
+  console.log(`Backend rodando em http://localhost:${PORT}`);
 });
